@@ -18,9 +18,14 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Create local.properties
+      - name: Download Gradle wrapper jar
         run: |
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          mkdir -p gradle/wrapper
+          curl -L https://github.com/gradle/gradle/raw/v8.11.1/gradle/wrapper/gradle-wrapper.jar \
+            -o gradle/wrapper/gradle-wrapper.jar
+
+      - name: Create local.properties
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
       - name: Grant gradlew permission
         run: chmod +x gradlew
