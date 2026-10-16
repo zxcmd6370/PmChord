@@ -18,11 +18,18 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Download Gradle wrapper jar
+      - name: Fix Gradle wrapper
         run: |
           mkdir -p gradle/wrapper
-          curl -L https://github.com/gradle/gradle/raw/v8.11.1/gradle/wrapper/gradle-wrapper.jar \
+          curl -sL https://github.com/gradle/gradle/raw/v8.11.1/gradle/wrapper/gradle-wrapper.jar \
             -o gradle/wrapper/gradle-wrapper.jar
+          cat > gradle/wrapper/gradle-wrapper.properties << 'PROPS'
+          distributionBase=GRADLE_USER_HOME
+          distributionPath=wrapper/dists
+          distributionUrl=https\://services.gradle.org/distributions/gradle-8.11.1-bin.zip
+          zipStoreBase=GRADLE_USER_HOME
+          zipStorePath=wrapper/dists
+          PROPS
 
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
